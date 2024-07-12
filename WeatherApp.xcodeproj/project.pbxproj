@@ -140,7 +140,6 @@
 			);
 			mainGroup = 0EEBCF922C4140ED00FCB8D9;
 			packageReferences = (
-				0E17B7332C4146840010FEBD /* XCRemoteSwiftPackageReference "SwiftLintPlugin" */,
 			);
 			productRefGroup = 0EEBCF9C2C4140ED00FCB8D9 /* Products */;
 			projectDirPath = "";
@@ -374,17 +373,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		0E17B7332C4146840010FEBD /* XCRemoteSwiftPackageReference "SwiftLintPlugin" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/lukepistrol/SwiftLintPlugin";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.55.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		0E9D09382C4148FC008CC8F5 /* SharedUtils */ = {
