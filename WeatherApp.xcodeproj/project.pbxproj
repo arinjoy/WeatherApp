@@ -10,6 +10,7 @@
 		0E9D09392C4148FC008CC8F5 /* SharedUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 0E9D09382C4148FC008CC8F5 /* SharedUtils */; };
 		0E9D093B2C414902008CC8F5 /* PresentationLayer in Frameworks */ = {isa = PBXBuildFile; productRef = 0E9D093A2C414902008CC8F5 /* PresentationLayer */; };
 		0E9D093D2C414905008CC8F5 /* DataLayer in Frameworks */ = {isa = PBXBuildFile; productRef = 0E9D093C2C414905008CC8F5 /* DataLayer */; };
+		0E9D09452C41EC4A008CC8F5 /* DomainLayer in Frameworks */ = {isa = PBXBuildFile; productRef = 0E9D09442C41EC4A008CC8F5 /* DomainLayer */; };
 		0EEBCF9F2C4140ED00FCB8D9 /* WeatherApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCF9E2C4140ED00FCB8D9 /* WeatherApp.swift */; };
 		0EEBCFA12C4140ED00FCB8D9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCFA02C4140ED00FCB8D9 /* ContentView.swift */; };
 		0EEBCFA32C4140ED00FCB8D9 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCFA22C4140ED00FCB8D9 /* Item.swift */; };
@@ -35,6 +36,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E9D09452C41EC4A008CC8F5 /* DomainLayer in Frameworks */,
 				0E9D093B2C414902008CC8F5 /* PresentationLayer in Frameworks */,
 				0E9D09392C4148FC008CC8F5 /* SharedUtils in Frameworks */,
 				0E9D093D2C414905008CC8F5 /* DataLayer in Frameworks */,
@@ -54,9 +56,9 @@
 		0EEBCF922C4140ED00FCB8D9 = {
 			isa = PBXGroup;
 			children = (
-				0E9D09432C41EA46008CC8F5 /* DomainLayer */,
 				0E17B7322C4145D40010FEBD /* SharedUtils */,
 				0E17B7312C4145410010FEBD /* DataLayer */,
+				0E9D09432C41EA46008CC8F5 /* DomainLayer */,
 				0E17B7302C41450C0010FEBD /* PresentationLayer */,
 				0EEBCF9D2C4140ED00FCB8D9 /* WeatherApp */,
 				0EEBCF9C2C4140ED00FCB8D9 /* Products */,
@@ -113,6 +115,7 @@
 				0E9D09382C4148FC008CC8F5 /* SharedUtils */,
 				0E9D093A2C414902008CC8F5 /* PresentationLayer */,
 				0E9D093C2C414905008CC8F5 /* DataLayer */,
+				0E9D09442C41EC4A008CC8F5 /* DomainLayer */,
 			);
 			productName = WeatherApp;
 			productReference = 0EEBCF9B2C4140ED00FCB8D9 /* WeatherApp.app */;
@@ -413,6 +416,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0E9D09402C414FE3008CC8F5 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
 			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		0E9D09442C41EC4A008CC8F5 /* DomainLayer */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DomainLayer;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
