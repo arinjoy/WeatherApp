@@ -6,7 +6,7 @@ import Foundation
 */
 
 struct ApiConstants {
-    
+
     /// Note:  change to your own OpenWeatherMap API key if needed
     static let apiKey = "6379ee91d0b77e1f680a38b96ee6b716"
 
