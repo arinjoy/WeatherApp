@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 @main
-struct WeatherAppApp: App {
+struct WeatherApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
