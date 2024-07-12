@@ -15,6 +15,7 @@ let package = Package(
     dependencies: [
         .package(path: "../SharedUtils"),
         .package(path: "../DataLayer"),
+        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.55.1")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -22,11 +23,13 @@ let package = Package(
         .target(
             name: "PresentationLayer",
             dependencies: ["SharedUtils",
-                           "DataLayer"]
+                           "DataLayer"],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")]
         ),
         .testTarget(
             name: "PresentationLayerTests",
-            dependencies: ["PresentationLayer"]
+            dependencies: ["PresentationLayer"],
+            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")]
         ),
     ]
 )
