@@ -21,6 +21,7 @@
 		0E17B7302C41450C0010FEBD /* PresentationLayer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationLayer; sourceTree = "<group>"; };
 		0E17B7312C4145410010FEBD /* DataLayer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DataLayer; sourceTree = "<group>"; };
 		0E17B7322C4145D40010FEBD /* SharedUtils */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SharedUtils; sourceTree = "<group>"; };
+		0E9D09432C41EA46008CC8F5 /* DomainLayer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DomainLayer; sourceTree = "<group>"; };
 		0EEBCF9B2C4140ED00FCB8D9 /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0EEBCF9E2C4140ED00FCB8D9 /* WeatherApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApp.swift; sourceTree = "<group>"; };
 		0EEBCFA02C4140ED00FCB8D9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -53,6 +54,7 @@
 		0EEBCF922C4140ED00FCB8D9 = {
 			isa = PBXGroup;
 			children = (
+				0E9D09432C41EA46008CC8F5 /* DomainLayer */,
 				0E17B7322C4145D40010FEBD /* SharedUtils */,
 				0E17B7312C4145410010FEBD /* DataLayer */,
 				0E17B7302C41450C0010FEBD /* PresentationLayer */,
