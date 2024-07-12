@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E9D09392C4148FC008CC8F5 /* SharedUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 0E9D09382C4148FC008CC8F5 /* SharedUtils */; };
+		0E9D093B2C414902008CC8F5 /* PresentationLayer in Frameworks */ = {isa = PBXBuildFile; productRef = 0E9D093A2C414902008CC8F5 /* PresentationLayer */; };
+		0E9D093D2C414905008CC8F5 /* DataLayer in Frameworks */ = {isa = PBXBuildFile; productRef = 0E9D093C2C414905008CC8F5 /* DataLayer */; };
 		0EEBCF9F2C4140ED00FCB8D9 /* WeatherApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCF9E2C4140ED00FCB8D9 /* WeatherApp.swift */; };
 		0EEBCFA12C4140ED00FCB8D9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCFA02C4140ED00FCB8D9 /* ContentView.swift */; };
 		0EEBCFA32C4140ED00FCB8D9 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCFA22C4140ED00FCB8D9 /* Item.swift */; };
@@ -15,6 +18,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0E17B7302C41450C0010FEBD /* PresentationLayer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PresentationLayer; sourceTree = "<group>"; };
+		0E17B7312C4145410010FEBD /* DataLayer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DataLayer; sourceTree = "<group>"; };
+		0E17B7322C4145D40010FEBD /* SharedUtils */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SharedUtils; sourceTree = "<group>"; };
 		0EEBCF9B2C4140ED00FCB8D9 /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0EEBCF9E2C4140ED00FCB8D9 /* WeatherApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApp.swift; sourceTree = "<group>"; };
 		0EEBCFA02C4140ED00FCB8D9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -28,17 +34,31 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E9D093B2C414902008CC8F5 /* PresentationLayer in Frameworks */,
+				0E9D09392C4148FC008CC8F5 /* SharedUtils in Frameworks */,
+				0E9D093D2C414905008CC8F5 /* DataLayer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0E9D09372C4148FC008CC8F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		0EEBCF922C4140ED00FCB8D9 = {
 			isa = PBXGroup;
 			children = (
+				0E17B7322C4145D40010FEBD /* SharedUtils */,
+				0E17B7312C4145410010FEBD /* DataLayer */,
+				0E17B7302C41450C0010FEBD /* PresentationLayer */,
 				0EEBCF9D2C4140ED00FCB8D9 /* WeatherApp */,
 				0EEBCF9C2C4140ED00FCB8D9 /* Products */,
+				0E9D09372C4148FC008CC8F5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -86,6 +106,11 @@
 			dependencies = (
 			);
 			name = WeatherApp;
+			packageProductDependencies = (
+				0E9D09382C4148FC008CC8F5 /* SharedUtils */,
+				0E9D093A2C414902008CC8F5 /* PresentationLayer */,
+				0E9D093C2C414905008CC8F5 /* DataLayer */,
+			);
 			productName = WeatherApp;
 			productReference = 0EEBCF9B2C4140ED00FCB8D9 /* WeatherApp.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +139,9 @@
 				Base,
 			);
 			mainGroup = 0EEBCF922C4140ED00FCB8D9;
+			packageReferences = (
+				0E17B7332C4146840010FEBD /* XCRemoteSwiftPackageReference "SwiftLintPlugin" */,
+			);
 			productRefGroup = 0EEBCF9C2C4140ED00FCB8D9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -346,6 +374,32 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0E17B7332C4146840010FEBD /* XCRemoteSwiftPackageReference "SwiftLintPlugin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lukepistrol/SwiftLintPlugin";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.55.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0E9D09382C4148FC008CC8F5 /* SharedUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SharedUtils;
+		};
+		0E9D093A2C414902008CC8F5 /* PresentationLayer */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PresentationLayer;
+		};
+		0E9D093C2C414905008CC8F5 /* DataLayer */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DataLayer;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0EEBCF932C4140ED00FCB8D9 /* Project object */;
 }
