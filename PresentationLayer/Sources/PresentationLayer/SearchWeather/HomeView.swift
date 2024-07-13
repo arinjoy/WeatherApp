@@ -1,17 +1,14 @@
 import SwiftUI
+import DomainLayer
 
 public struct HomeView: View {
 
     public init() {}
 
-    @StateObject var weatherViewModel: WeatherViewModel = .init()
+    @StateObject var viewModel: WeatherSearchViewModel = .init()
 
     @State private var searchText = ""
-    @State private var searchTimer: Timer?
     @State private var isSearching = false
-    @State private var searchResultsNeeded = false
-
-    @State private var curtainOpacity = 1.0
 
     public var body: some View {
 
@@ -26,84 +23,66 @@ public struct HomeView: View {
 
             VStack {
                 Spacer()
-
-                if !searchResultsNeeded {
-                    Text("Hello!") // TODO: update with welcome message
-                    Spacer()
-                    Spacer()
-                }
-
                 toolBarView
             }
 
             VStack {
-                if weatherViewModel.weatherData != nil && searchResultsNeeded {
+                switch viewModel.weatherSearchState {
+                case .success(let weather):
                     HStack {
                         VStack(alignment: .leading) {
                             Spacer()
-                            searchResultView
+                            searchResultView(from: weather)
                             Spacer()
                             Spacer()
                             Spacer()
                         }
                         .offset(y: isSearching ? -60 : 0)
-                        .onTapGesture {
-                            hideResults()
-                        }
                         .padding()
 
                         Spacer()
                     }
+                default:
+                    VStack(alignment: .leading) {
+                        Spacer()
+                        Text("Hello!")
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                    }
+
                 }
             }
         }
         .onChange(of: searchText) {
             applyQuery()
         }
-
-    }
-
-    private func hideResults() {
-        searchResultsNeeded = false
     }
 
     private func applyQuery() {
-        // Start a new timer with a 1-second delay
-        searchTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) { _ in
-
-            DispatchQueue.main.async {
-
-                searchResultsNeeded = true
-                weatherViewModel.query = searchText
-                
-                print(searchText)
-
-                Task {
-                    await weatherViewModel.fetchWeather()
-                }
-            }
-        }
+        viewModel.bindSearchQuery(searchText)
     }
 }
 
 private extension HomeView {
     
     @ViewBuilder
-    var searchResultView: some View {
+    func searchResultView(from weather: CityWeather) -> some View {
 
         VStack(alignment: .leading) {
-            Text("\(Int(weatherViewModel.weatherData?.temperature  ?? 0))°")
+            Text("\(Int(weather.temperature))°")
                 .font(.system(size: 100))
                 .foregroundStyle(.white)
 
-            Text(weatherViewModel.weatherData?.cityName.prefix(25) ?? "")
+            Text(weather.cityName.prefix(25))
                 .font(.largeTitle)
                 .fontWeight(.medium)
                 .foregroundStyle(.white)
                 .lineLimit(1)
 
-            Text(weatherViewModel.weatherData?.description ?? "")
+            Text(weather.description ?? "")
                 .font(.title2)
+                .foregroundStyle(.white)
                 .lineLimit(1)
         }
         .onTapGesture {
@@ -111,7 +90,6 @@ private extension HomeView {
                 if isSearching {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
-                //viewingDetails = true
             }
         }
     }
@@ -161,7 +139,6 @@ private extension HomeView {
                 if isSearching && !searchText.isEmpty {
                     Button {
                         searchText = ""
-                        weatherViewModel.weatherData = nil
                     } label: {
                         Image(systemName: "x.circle.fill")
                             .foregroundStyle(.white)
