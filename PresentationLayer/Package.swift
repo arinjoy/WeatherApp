@@ -15,6 +15,7 @@ let package = Package(
     dependencies: [
         .package(path: "../SharedUtils"),
         .package(path: "../DataLayer"),
+        .package(path: "../DomainLayer"),
         .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.55.1")
     ],
     targets: [
@@ -23,6 +24,7 @@ let package = Package(
         .target(
             name: "PresentationLayer",
             dependencies: ["SharedUtils",
+                           "DomainLayer",
                            "DataLayer"],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")]
         ),

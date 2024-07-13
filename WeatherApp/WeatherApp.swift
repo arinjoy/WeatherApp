@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import PresentationLayer
 
 @main
 struct WeatherApp: App {
@@ -17,9 +18,12 @@ struct WeatherApp: App {
     }()
 
     var body: some Scene {
+//        WindowGroup {
+//            ContentView()
+//        }
+//        .modelContainer(sharedModelContainer)
         WindowGroup {
-            ContentView()
+            HomeView()
         }
-        .modelContainer(sharedModelContainer)
     }
 }
