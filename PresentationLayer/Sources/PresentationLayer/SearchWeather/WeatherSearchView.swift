@@ -23,7 +23,7 @@ public struct WeatherSearchView: View {
                 VStack {
                     Spacer()
                     recentLocationsView
-                    toolBarView
+                    bottomSearchBarView
                 }
 
                 VStack {
@@ -43,6 +43,7 @@ public struct WeatherSearchView: View {
                     }
                 }
             }
+            .toolbar { toolBarContent }
             .onChange(of: searchText) {
                 applyQuery()
             }
@@ -54,7 +55,6 @@ public struct WeatherSearchView: View {
                 }
             }
         }
-
     }
 
     private func applyQuery() {
@@ -113,14 +113,34 @@ private extension WeatherSearchView {
             }
     }
 
+    @ToolbarContentBuilder
+    var toolBarContent: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button {
+                // TODO: isShowingSettings.toggle()
+            } label: {
+                Image(systemName: "gear")
+                    .resizable()
+                    .foregroundColor(.white)
+                    .scaledToFit()
+                    .frame(width: 50, height: 30)
+                    .shadow(radius: 6, y: 4)
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityLabel("Settings")
+            }
+        }
+    }
+
     @ViewBuilder
-    var toolBarView: some View {
-        HStack(spacing: 0) {
+    var bottomSearchBarView: some View {
+        HStack {
+
             searchBar
-                .offset(x: 10)
-            Spacer()
+
             if isSearching {
-                Button { // Dismiss system keyboard
+                Spacer()
+
+                Button {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     withAnimation {
                         isSearching = false
@@ -130,10 +150,9 @@ private extension WeatherSearchView {
                         .frame(width: 50, height: 30)
                 }
                 .tint(.white)
-            } else {
-                settingsButton
+
+                Spacer()
             }
-            Spacer()
         }
         .padding(.bottom)
     }
@@ -169,21 +188,6 @@ private extension WeatherSearchView {
             .padding()
             .frame(width: 320, height: 40)
         }
-    }
-
-    @ViewBuilder
-    var settingsButton: some View {
-        Menu {
-            // TODO: fill up later based on the need of settings
-        } label: {
-            Image(systemName: "gear")
-                .resizable()
-                .foregroundColor(.white)
-                .scaledToFit()
-                .frame(width: 50, height: 30)
-                .shadow(radius: 6, y: 4)
-        }
-        .buttonStyle(PlainButtonStyle())
     }
 
     private var recentLocationsView: some View {
