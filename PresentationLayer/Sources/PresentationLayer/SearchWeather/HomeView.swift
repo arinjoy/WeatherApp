@@ -103,6 +103,11 @@ private extension HomeView {
                 .foregroundStyle(.white)
                 .lineLimit(1)
 
+            Text("Feels like \(Int(weather.feelsLikeTemperature))°")
+                .font(.title2)
+                .foregroundStyle(.white)
+                .lineLimit(1)
+
             AsyncImage(url: weather.iconURL) { phase in
                 switch phase {
                 case .empty:
@@ -110,7 +115,7 @@ private extension HomeView {
                 case .success(let image):
                     image.resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: 100, maxHeight: 100)
+                        .frame(width: 100, height: 100)
                 case .failure:
                     Image(systemName: "photo")
                 @unknown default:

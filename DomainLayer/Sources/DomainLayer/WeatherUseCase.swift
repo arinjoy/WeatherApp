@@ -50,6 +50,7 @@ private extension WeatherUseCase {
         CityWeather(id: String(item.cityId),
                     cityName: item.name,
                     temperature: item.mainInfo.temperture,
+                    feelsLikeTemperature: item.mainInfo.feelsLikeTemperature,
                     minTemperature: item.mainInfo.minTemperature,
                     maxTemperature: item.mainInfo.maxTemperature,
                     humidity: item.mainInfo.humidity,
