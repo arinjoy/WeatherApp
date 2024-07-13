@@ -3,7 +3,13 @@ import DomainLayer
 
 struct WeatherDetailView: View {
 
-    let weather: CityWeather
+    private let cityName: String
+
+    init(cityName: String) {
+        self.cityName = cityName
+    }
+
+    @StateObject var viewModel: WeatherSearchViewModel = .init()
 
     var body: some View {
         
@@ -12,9 +18,20 @@ struct WeatherDetailView: View {
             backgroundGradientView
 
             VStack {
-                WeatherSummaryView(weather: weather)
+
+                switch viewModel.weatherSearchState {
+                case .success(let weather):
+                    WeatherSummaryView(weather: weather)
+
+                default:
+                    EmptyView()
+                }
+
                 Spacer()
             }
+        }
+        .onAppear {
+            viewModel.bindSearchQuery(cityName)
         }
     }
 
@@ -30,5 +47,5 @@ struct WeatherDetailView: View {
 }
 
 #Preview {
-    WeatherDetailView(weather: SampleData.cityWeather)
+    WeatherDetailView(cityName: "Sydney")
 }

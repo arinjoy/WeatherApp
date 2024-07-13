@@ -9,11 +9,13 @@ public class WeatherSearchViewModel: ObservableObject {
 
     private var useCase: WeatherUseCase
 
-    @Published private var searchQuery: String = ""
+    @Published var searchQuery: String = ""
 
     @Published var weatherSearchState: WeatherSearchState = .idle
 
     private var searchCancellable: AnyCancellable?
+
+    // MARK: - Lifecycle
 
     public init() {
         useCase = WeatherUseCase()
@@ -23,6 +25,8 @@ public class WeatherSearchViewModel: ObservableObject {
         searchCancellable?.cancel()
         searchCancellable = nil
     }
+
+    // MARK: - API Methods
 
     func bindSearchQuery(_ query: String) {
 

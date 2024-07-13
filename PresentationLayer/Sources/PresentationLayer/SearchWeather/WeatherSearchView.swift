@@ -38,8 +38,8 @@ public struct WeatherSearchView: View {
                         EmptyView()
                     case .loading:
                         EmptyView()
-                    case .searching:
-                        Text("searching now")
+                    default:
+                        EmptyView()
                     }
                 }
             }
@@ -221,7 +221,7 @@ private extension WeatherSearchView {
     @ViewBuilder
     func locationTile(from location: SearchLocation) -> some View {
         NavigationLink {
-            WeatherDetailView(weather: SampleData.cityWeather)
+            WeatherDetailView(cityName: location.name)
         } label: {
             Text(location.name)
                 .font(.headline)
