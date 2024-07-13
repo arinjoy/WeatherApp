@@ -11,8 +11,9 @@
 		0E9D093B2C414902008CC8F5 /* PresentationLayer in Frameworks */ = {isa = PBXBuildFile; productRef = 0E9D093A2C414902008CC8F5 /* PresentationLayer */; };
 		0E9D093D2C414905008CC8F5 /* DataLayer in Frameworks */ = {isa = PBXBuildFile; productRef = 0E9D093C2C414905008CC8F5 /* DataLayer */; };
 		0E9D09452C41EC4A008CC8F5 /* DomainLayer in Frameworks */ = {isa = PBXBuildFile; productRef = 0E9D09442C41EC4A008CC8F5 /* DomainLayer */; };
+		0E9D09472C42520A008CC8F5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E9D09462C42520A008CC8F5 /* ContentView.swift */; };
 		0EEBCF9F2C4140ED00FCB8D9 /* WeatherApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCF9E2C4140ED00FCB8D9 /* WeatherApp.swift */; };
-		0EEBCFA12C4140ED00FCB8D9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCFA02C4140ED00FCB8D9 /* ContentView.swift */; };
+		0EEBCFA12C4140ED00FCB8D9 /* Content1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCFA02C4140ED00FCB8D9 /* Content1View.swift */; };
 		0EEBCFA32C4140ED00FCB8D9 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEBCFA22C4140ED00FCB8D9 /* Item.swift */; };
 		0EEBCFA52C4140EF00FCB8D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0EEBCFA42C4140EF00FCB8D9 /* Assets.xcassets */; };
 		0EEBCFA82C4140EF00FCB8D9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0EEBCFA72C4140EF00FCB8D9 /* Preview Assets.xcassets */; };
@@ -23,9 +24,10 @@
 		0E17B7312C4145410010FEBD /* DataLayer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DataLayer; sourceTree = "<group>"; };
 		0E17B7322C4145D40010FEBD /* SharedUtils */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SharedUtils; sourceTree = "<group>"; };
 		0E9D09432C41EA46008CC8F5 /* DomainLayer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DomainLayer; sourceTree = "<group>"; };
+		0E9D09462C42520A008CC8F5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0EEBCF9B2C4140ED00FCB8D9 /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0EEBCF9E2C4140ED00FCB8D9 /* WeatherApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApp.swift; sourceTree = "<group>"; };
-		0EEBCFA02C4140ED00FCB8D9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		0EEBCFA02C4140ED00FCB8D9 /* Content1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content1View.swift; sourceTree = "<group>"; };
 		0EEBCFA22C4140ED00FCB8D9 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		0EEBCFA42C4140EF00FCB8D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0EEBCFA72C4140EF00FCB8D9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -78,7 +80,8 @@
 			isa = PBXGroup;
 			children = (
 				0EEBCF9E2C4140ED00FCB8D9 /* WeatherApp.swift */,
-				0EEBCFA02C4140ED00FCB8D9 /* ContentView.swift */,
+				0E9D09462C42520A008CC8F5 /* ContentView.swift */,
+				0EEBCFA02C4140ED00FCB8D9 /* Content1View.swift */,
 				0EEBCFA22C4140ED00FCB8D9 /* Item.swift */,
 				0EEBCFA42C4140EF00FCB8D9 /* Assets.xcassets */,
 				0EEBCFA62C4140EF00FCB8D9 /* Preview Content */,
@@ -174,8 +177,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0EEBCFA12C4140ED00FCB8D9 /* ContentView.swift in Sources */,
+				0EEBCFA12C4140ED00FCB8D9 /* Content1View.swift in Sources */,
 				0EEBCFA32C4140ED00FCB8D9 /* Item.swift in Sources */,
+				0E9D09472C42520A008CC8F5 /* ContentView.swift in Sources */,
 				0EEBCF9F2C4140ED00FCB8D9 /* WeatherApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

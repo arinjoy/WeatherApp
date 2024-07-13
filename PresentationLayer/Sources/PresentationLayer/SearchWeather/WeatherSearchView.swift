@@ -1,7 +1,8 @@
 import SwiftUI
+import SwiftData
 import DomainLayer
 
-public struct HomeView: View {
+public struct WeatherSearchView: View {
 
     public init() {}
 
@@ -9,6 +10,10 @@ public struct HomeView: View {
 
     @State private var searchText = ""
     @State private var isSearching = false
+
+    @Environment(\.modelContext) private var modelContext
+
+    @Query(sort: \SearchLocation.timeStamp, order: .reverse, animation: .smooth) var recentLocations: [SearchLocation]
 
     public var body: some View {
 
@@ -18,6 +23,7 @@ public struct HomeView: View {
 
             VStack {
                 Spacer()
+                recentLocationsView
                 toolBarView
             }
 
@@ -25,8 +31,10 @@ public struct HomeView: View {
                 switch viewModel.weatherSearchState {
                 case .idle:
                     greeetingView
+
                 case .success(let weather):
                     searchResultView(from: weather)
+
                 case .failure:
                     EmptyView()
                 case .loading:
@@ -39,6 +47,13 @@ public struct HomeView: View {
         .onChange(of: searchText) {
             applyQuery()
         }
+        .onChange(of: viewModel.weatherSearchState) {
+            if case .success(let weather) = viewModel.weatherSearchState {
+                modelContext.insert(
+                    SearchLocation(id: weather.id, name: weather.cityName, timeStamp: Date.now)
+                )
+            }
+        }
     }
 
     private func applyQuery() {
@@ -46,7 +61,7 @@ public struct HomeView: View {
     }
 }
 
-private extension HomeView {
+private extension WeatherSearchView {
 
     @ViewBuilder
     var backgroundGradientView: some View {
@@ -87,10 +102,29 @@ private extension HomeView {
 
     @ViewBuilder
     func weatherDetailView(from weather: CityWeather) -> some View {
-        VStack(alignment: .center) {
-            Text("\(Int(weather.temperature))°")
-                .font(.system(size: 100))
-                .foregroundStyle(.white)
+        VStack(alignment: .leading) {
+            HStack {
+
+                Text("\(Int(weather.temperature))°")
+                    .font(.system(size: 100))
+                    .foregroundStyle(.white)
+
+                AsyncImage(url: weather.iconURL) { phase in
+                    switch phase {
+                    case .empty:
+                        ProgressView()
+                    case .success(let image):
+                        image.resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 100, height: 100)
+                    case .failure:
+                        Image(systemName: "photo")
+                    @unknown default:
+                        EmptyView()
+                    }
+                }
+                .frame(maxWidth: 100, maxHeight: 100)
+            }
 
             Text(weather.cityName.prefix(25))
                 .font(.largeTitle)
@@ -107,22 +141,6 @@ private extension HomeView {
                 .font(.title2)
                 .foregroundStyle(.white)
                 .lineLimit(1)
-
-            AsyncImage(url: weather.iconURL) { phase in
-                switch phase {
-                case .empty:
-                    ProgressView()
-                case .success(let image):
-                    image.resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100)
-                case .failure:
-                    Image(systemName: "photo")
-                @unknown default:
-                    EmptyView()
-                }
-            }
-            .frame(maxWidth: 100, maxHeight: 100)
         }
         .onTapGesture {
             withAnimation(.easeIn(duration: 0.3)) {
@@ -206,8 +224,56 @@ private extension HomeView {
         .buttonStyle(PlainButtonStyle())
     }
 
+    private var recentLocationsView: some View {
+        VStack {
+            if !recentLocations.isEmpty {
+                HStack {
+                    Text("Recent Searches")
+                        .font(.callout)
+                        .foregroundStyle(.white.opacity(0.7))
+                        .padding(.leading)
+                        .padding(.bottom, -10)
+                    Spacer()
+                }
+            }
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(recentLocations, id: \.timeStamp) { location in
+                        locationTile(from: location)
+                            .contextMenu {
+                                Button {
+                                    modelContext.delete(location)
+                                } label: {
+                                    Text("Delete")
+                                }
+                            }
+                    }
+                }
+                .padding(.vertical, 8)
+                .padding(.leading)
+            }
+        }
+    }
+
+    @ViewBuilder
+    func locationTile(from location: SearchLocation) -> some View {
+        Text(location.name)
+            .font(.headline)
+            .foregroundStyle(.white)
+            .padding(.vertical, 6)
+            .padding(.horizontal, 6)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundStyle(.thinMaterial)
+                .contentShape(Rectangle())
+        )
+        .cornerRadius(10)
+
+    }
+
 }
 
 #Preview {
-    HomeView()
+    WeatherSearchView()
 }
