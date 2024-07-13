@@ -7,4 +7,6 @@ public protocol WeatherUseCaseType {
     /// Searches for weather for a given query string of city/location
     func fetchWeather(with query: String) -> AnyPublisher<CityWeather, NetworkError>
 
+    func fetchWeather(with query: String) async throws -> CityWeather
+
 }

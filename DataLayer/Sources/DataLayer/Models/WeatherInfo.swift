@@ -53,14 +53,10 @@ public struct SummaryInfo: Decodable {
 }
 
 public struct SystemInfo: Decodable {
-    public let timezone: Int64
-    public let countryCode: String
     public let sunriseTime: Double
     public let sunsetTime: Double
 
     private enum CodingKeys: String, CodingKey {
-        case timezone = "timezone"
-        case countryCode = "country"
         case sunriseTime = "sunrise"
         case sunsetTime = "sunset"
     }

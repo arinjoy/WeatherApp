@@ -29,6 +29,11 @@ public final class WeatherUseCase: WeatherUseCaseType {
             .receive(on: Scheduler.main)
             .eraseToAnyPublisher()
     }
+
+    public func fetchWeather(with query: String) async throws -> CityWeather {
+        try await fetchWeather(with: query).async()
+    }
+
 }
 
 // MARK: - Private Helpers
