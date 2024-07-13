@@ -52,7 +52,6 @@ public class WeatherSearchViewModel: ObservableObject {
     }
 }
 
-
 enum WeatherSearchState {
     case idle
     case searching

@@ -16,44 +16,45 @@ public struct WeatherSearchView: View {
     @Query(sort: \SearchLocation.timeStamp, order: .reverse, animation: .smooth) var recentLocations: [SearchLocation]
 
     public var body: some View {
+        NavigationStack {
+            ZStack {
+                backgroundGradientView
 
-        ZStack {
+                VStack {
+                    Spacer()
+                    recentLocationsView
+                    toolBarView
+                }
 
-            backgroundGradientView
+                VStack {
+                    switch viewModel.weatherSearchState {
+                    case .idle:
+                        greeetingView
 
-            VStack {
-                Spacer()
-                recentLocationsView
-                toolBarView
+                    case .success(let weather):
+                        searchResultView(from: weather)
+
+                    case .failure:
+                        EmptyView()
+                    case .loading:
+                        EmptyView()
+                    case .searching:
+                        Text("searching now")
+                    }
+                }
             }
-
-            VStack {
-                switch viewModel.weatherSearchState {
-                case .idle:
-                    greeetingView
-
-                case .success(let weather):
-                    searchResultView(from: weather)
-
-                case .failure:
-                    EmptyView()
-                case .loading:
-                    EmptyView()
-                case .searching:
-                    Text("searching now")
+            .onChange(of: searchText) {
+                applyQuery()
+            }
+            .onChange(of: viewModel.weatherSearchState) {
+                if case .success(let weather) = viewModel.weatherSearchState {
+                    modelContext.insert(
+                        SearchLocation(id: weather.id, name: weather.cityName, timeStamp: Date.now)
+                    )
                 }
             }
         }
-        .onChange(of: searchText) {
-            applyQuery()
-        }
-        .onChange(of: viewModel.weatherSearchState) {
-            if case .success(let weather) = viewModel.weatherSearchState {
-                modelContext.insert(
-                    SearchLocation(id: weather.id, name: weather.cityName, timeStamp: Date.now)
-                )
-            }
-        }
+
     }
 
     private func applyQuery() {
@@ -102,53 +103,14 @@ private extension WeatherSearchView {
 
     @ViewBuilder
     func weatherDetailView(from weather: CityWeather) -> some View {
-        VStack(alignment: .leading) {
-            HStack {
-
-                Text("\(Int(weather.temperature))°")
-                    .font(.system(size: 100))
-                    .foregroundStyle(.white)
-
-                AsyncImage(url: weather.iconURL) { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView()
-                    case .success(let image):
-                        image.resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 100, height: 100)
-                    case .failure:
-                        Image(systemName: "photo")
-                    @unknown default:
-                        EmptyView()
+        WeatherSummaryView(weather: weather)
+            .onTapGesture {
+                withAnimation(.easeIn(duration: 0.3)) {
+                    if isSearching {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     }
                 }
-                .frame(maxWidth: 100, maxHeight: 100)
             }
-
-            Text(weather.cityName.prefix(25))
-                .font(.largeTitle)
-                .fontWeight(.medium)
-                .foregroundStyle(.white)
-                .lineLimit(1)
-
-            Text(weather.description ?? "")
-                .font(.title2)
-                .foregroundStyle(.white)
-                .lineLimit(1)
-
-            Text("Feels like \(Int(weather.feelsLikeTemperature))°")
-                .font(.title2)
-                .foregroundStyle(.white)
-                .lineLimit(1)
-        }
-        .onTapGesture {
-            withAnimation(.easeIn(duration: 0.3)) {
-                if isSearching {
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                }
-            }
-        }
     }
 
     @ViewBuilder
@@ -258,18 +220,21 @@ private extension WeatherSearchView {
 
     @ViewBuilder
     func locationTile(from location: SearchLocation) -> some View {
-        Text(location.name)
-            .font(.headline)
-            .foregroundStyle(.white)
-            .padding(.vertical, 6)
-            .padding(.horizontal, 6)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .foregroundStyle(.thinMaterial)
-                .contentShape(Rectangle())
-        )
-        .cornerRadius(10)
-
+        NavigationLink {
+            WeatherDetailView(weather: SampleData.cityWeather)
+        } label: {
+            Text(location.name)
+                .font(.headline)
+                .foregroundStyle(.white)
+                .padding(.vertical, 6)
+                .padding(.horizontal, 6)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .foregroundStyle(.thinMaterial)
+                    .contentShape(Rectangle())
+            )
+            .cornerRadius(10)
+        }
     }
 
 }
