@@ -47,6 +47,7 @@ public class WeatherSearchViewModel: ObservableObject {
                 }
             } receiveValue: { result in
                 self.weatherSearchState = .success(result)
+                print(result)
             }
     }
 }

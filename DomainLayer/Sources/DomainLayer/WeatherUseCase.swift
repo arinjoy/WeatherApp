@@ -57,7 +57,7 @@ private extension WeatherUseCase {
                     title: item.summaries?.first?.title,
                     description: item.summaries?.first?.description,
                     iconURL: URL(
-                        string: "http://openweathermap.org/img/w/" +
+                        string: "https://openweathermap.org/img/w/" +
                                 (item.summaries?.first?.iconCode ?? "") + ".png"
                     )
         )

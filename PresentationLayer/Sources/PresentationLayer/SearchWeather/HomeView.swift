@@ -14,12 +14,7 @@ public struct HomeView: View {
 
         ZStack {
 
-            LinearGradient(colors: [
-                Color(hue: 0.62, saturation: 0.5, brightness: 0.33),
-                Color(hue: 0.66, saturation: 0.8, brightness: 0.1)
-            ], startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
-                .opacity(0.85)
+            backgroundGradientView
 
             VStack {
                 Spacer()
@@ -28,29 +23,16 @@ public struct HomeView: View {
 
             VStack {
                 switch viewModel.weatherSearchState {
+                case .idle:
+                    greeetingView
                 case .success(let weather):
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Spacer()
-                            searchResultView(from: weather)
-                            Spacer()
-                            Spacer()
-                            Spacer()
-                        }
-                        .offset(y: isSearching ? -60 : 0)
-                        .padding()
-
-                        Spacer()
-                    }
-                default:
-                    VStack(alignment: .leading) {
-                        Spacer()
-                        Text("Hello!")
-                        Spacer()
-                        Spacer()
-                        Spacer()
-                    }
-
+                    searchResultView(from: weather)
+                case .failure:
+                    EmptyView()
+                case .loading:
+                    EmptyView()
+                case .searching:
+                    Text("searching now")
                 }
             }
         }
@@ -65,11 +47,47 @@ public struct HomeView: View {
 }
 
 private extension HomeView {
-    
+
+    @ViewBuilder
+    var backgroundGradientView: some View {
+        LinearGradient(colors: [
+            Color(hue: 0.62, saturation: 0.5, brightness: 0.33),
+            Color(hue: 0.66, saturation: 0.8, brightness: 0.1)
+        ], startPoint: .top, endPoint: .bottom)
+            .ignoresSafeArea()
+            .opacity(0.85)
+    }
+
+    @ViewBuilder
+    var greeetingView: some View {
+        VStack(alignment: .leading) {
+            Spacer()
+            Text("Hello!")
+                .font(.largeTitle)
+                .fontWeight(.medium)
+                .foregroundStyle(.white)
+            Spacer()
+            Spacer()
+            Spacer()
+        }
+    }
+
     @ViewBuilder
     func searchResultView(from weather: CityWeather) -> some View {
+        VStack(alignment: .center) {
+            Spacer()
+            weatherDetailView(from: weather)
+            Spacer()
+            Spacer()
+            Spacer()
+        }
+        .offset(y: isSearching ? -60 : 0)
+        .padding()
+    }
 
-        VStack(alignment: .leading) {
+    @ViewBuilder
+    func weatherDetailView(from weather: CityWeather) -> some View {
+        VStack(alignment: .center) {
             Text("\(Int(weather.temperature))°")
                 .font(.system(size: 100))
                 .foregroundStyle(.white)
@@ -84,9 +102,25 @@ private extension HomeView {
                 .font(.title2)
                 .foregroundStyle(.white)
                 .lineLimit(1)
+
+            AsyncImage(url: weather.iconURL) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                case .success(let image):
+                    image.resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: 100, maxHeight: 100)
+                case .failure:
+                    Image(systemName: "photo")
+                @unknown default:
+                    EmptyView()
+                }
+            }
+            .frame(maxWidth: 100, maxHeight: 100)
         }
         .onTapGesture {
-            withAnimation(.easeIn(duration: 0.3)){
+            withAnimation(.easeIn(duration: 0.3)) {
                 if isSearching {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                 }
