@@ -49,7 +49,7 @@ private extension WeatherSearchViewModel {
 
     private func updateSearchState(from query: String) {
 
-        guard query.isEmpty == false else {
+        guard query.trimmed().isEmpty == false else {
             weatherSearchState = .idle
             return
         }
