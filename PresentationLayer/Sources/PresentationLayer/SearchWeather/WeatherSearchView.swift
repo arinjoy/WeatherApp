@@ -150,7 +150,6 @@ private extension WeatherSearchView {
     @ViewBuilder
     var bottomSearchBarView: some View {
         HStack {
-
             searchBar
 
             if isSearching {
@@ -184,11 +183,16 @@ private extension WeatherSearchView {
             HStack {
                 Image(systemName: "magnifyingglass")
                     .padding(.leading, 5)
-                TextField(viewModel.searchBarPlaceholder, text: $searchText)
-                    .autocorrectionDisabled()
-                    .onTapGesture {
-                        isSearching = true
-                    }
+
+                TextField(
+                    "",
+                    text: $searchText,
+                    prompt: Text(viewModel.searchBarPrompt).foregroundStyle(.white.opacity(0.7)))
+                .autocorrectionDisabled()
+                .onTapGesture {
+                    isSearching = true
+                }
+
                 Spacer()
 
                 if isSearching && !searchText.isEmpty {

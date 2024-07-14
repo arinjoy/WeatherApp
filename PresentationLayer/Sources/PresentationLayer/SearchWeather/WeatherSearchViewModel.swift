@@ -39,8 +39,8 @@ public class WeatherSearchViewModel: ObservableObject {
     // so that all copies can be placed in centralised strings files and
     // can be unit tested
 
-    var greetingMessage: String { "Search weather by city name or postcode" }
-    var searchBarPlaceholder: String { "Search for a city" }
+    var greetingMessage: String { "Search weather by city name or postcode in 🇦🇺" }
+    var searchBarPrompt: String { "Search for a city" }
     var recentSearchesHeaderText: String { "Recent Searches" }
 
     // MARK: - API Methods
