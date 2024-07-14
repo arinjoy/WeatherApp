@@ -25,8 +25,6 @@ public final class WeatherUseCase: WeatherUseCaseType {
             .map { [unowned self] in
                 self.mapCityWeather(from: $0)
             }
-            .subscribe(on: Scheduler.background)
-            .receive(on: Scheduler.main)
             .eraseToAnyPublisher()
     }
 
