@@ -99,8 +99,22 @@ final class WeatherSearchViewModelTests: XCTestCase {
         // THEN - viewModel's state should become `success`
         switch testSubject.loadingState {
         case .success(let item):
-            // AND retuned associated item is the same as provided by useCase
-            XCTAssertEqual(item, WeatherUseCaseMock.sampleData)
+            // AND associated item is transformed from the
+            // is `CityWeather` object as returned by useCase's mock data
+
+            XCTAssertEqual(item.id, "2158177")
+            XCTAssertEqual(item.cityName, "Melbourne")
+            XCTAssertEqual(item.summary, "overcast clouds")
+            XCTAssertEqual(item.averageTemperature, "10°")
+            XCTAssertEqual(item.minTemperature, "9.1")
+            XCTAssertEqual(item.maxTemperature, "10.9")
+            XCTAssertEqual(item.feelsLike, "Feels like 9°")
+            XCTAssertEqual(item.humidity, "85%")
+            XCTAssertEqual(item.windSpeed, "4.5m/s")
+
+            // NOTE: We could use Transformer helper object and unit test
+            // all the formatting conversion logic
+
         default:
             XCTFail("Loading state must become `success`")
         }

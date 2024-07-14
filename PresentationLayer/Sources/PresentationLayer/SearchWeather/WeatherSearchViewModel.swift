@@ -16,12 +16,32 @@ public class WeatherSearchViewModel: ObservableObject {
 
     private var cancellables: Set<AnyCancellable> = .init()
 
+    // MARK: - Types
+
+    enum LoadingState {
+        case idle
+        case loading
+        case success(WeatherPresentationItem)
+        case failure(NetworkError)
+    }
+
     // MARK: - Initializer
 
     public init(useCase: WeatherUseCaseType = WeatherUseCase()) {
         self.useCase = useCase
         bindSearch()
     }
+
+    // MARK: - String copies
+
+    // TODO: ✋🏼
+    // Move these copies into some form of localisation framework or SwiftGen
+    // so that all copies can be placed in centralised strings files and
+    // can be unit tested
+
+    var greetingMessage: String { "Search weather by city name or postcode" }
+    var searchBarPlaceholder: String { "Search for a city" }
+    var recentSearchesHeaderText: String { "Recent Searches" }
 
     // MARK: - API Methods
 
@@ -58,29 +78,26 @@ private extension WeatherSearchViewModel {
         useCase
             .fetchWeather(with: query)
             .receive(on: Scheduler.main)
+            // TODO: 
+            // Extra delay added for testing and visualisation only.
+            // Should be removed in production code.
             .delay(for: .seconds(0.5), scheduler: Scheduler.main)
             .sink { [unowned self] completion in
                 if case .failure(let error) = completion {
                     loadingState = .failure(error)
                 }
-            } receiveValue: { [unowned self] result in
-                loadingState = .success(result)
-                print(result)
+            } receiveValue: { [unowned self] weather in
+                loadingState = .success(WeatherPresentationItem(weather))
             }
             .store(in: &cancellables)
     }
 }
 
-enum LoadingState {
-    case idle
-    case loading
-    case success(CityWeather)
-    case failure(NetworkError)
-}
+extension WeatherSearchViewModel.LoadingState: Equatable {
 
-extension LoadingState: Equatable {
-
-    static func == (lhs: LoadingState, rhs: LoadingState) -> Bool {
+    static func == (
+        lhs: WeatherSearchViewModel.LoadingState, rhs: WeatherSearchViewModel.LoadingState
+    ) -> Bool {
         switch (lhs, rhs) {
         case (.idle, .idle): return true
         case (.loading, .loading): return true

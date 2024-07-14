@@ -3,16 +3,16 @@ import DomainLayer
 
 struct WeatherSummaryView: View {
 
-    let weather: CityWeather
+    let item: WeatherPresentationItem
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Text("\(Int(weather.temperature))°")
+                Text(item.averageTemperature)
                     .font(.system(size: 100))
                     .foregroundStyle(.white)
 
-                AsyncImage(url: weather.iconURL) { phase in
+                AsyncImage(url: item.iconURL) { phase in
                     switch phase {
                     case .empty:
                         ProgressView()
@@ -29,18 +29,18 @@ struct WeatherSummaryView: View {
                 .frame(maxWidth: 100, maxHeight: 100)
             }
 
-            Text(weather.cityName.prefix(25))
+            Text(item.cityName)
                 .font(.largeTitle)
                 .fontWeight(.medium)
                 .foregroundStyle(.white)
                 .lineLimit(1)
 
-            Text(weather.description ?? "")
+            Text(item.summary)
                 .font(.title2)
                 .foregroundStyle(.white)
                 .lineLimit(1)
 
-            Text("Feels like \(Int(weather.feelsLikeTemperature))°")
+            Text(item.feelsLike)
                 .font(.title2)
                 .foregroundStyle(.white)
                 .lineLimit(1)
@@ -49,7 +49,7 @@ struct WeatherSummaryView: View {
 }
 
 #Preview {
-    WeatherSummaryView(weather: SampleData.cityWeather)
+    WeatherSummaryView(item: .init(SampleData.cityWeather))
         .padding(50)
         .background(
             Color.gray

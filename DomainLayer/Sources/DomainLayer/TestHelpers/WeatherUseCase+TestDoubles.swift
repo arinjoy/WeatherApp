@@ -13,7 +13,6 @@ public final class WeatherUseCaseSpy: WeatherUseCaseType {
     // Spied values
     public var query: String?
 
-
     public func fetchWeather(with query: String) -> AnyPublisher<CityWeather, NetworkError> {
         fetchWeatherCalled = true
         self.query = query

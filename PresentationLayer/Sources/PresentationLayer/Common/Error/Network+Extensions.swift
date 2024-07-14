@@ -17,9 +17,9 @@ extension NetworkError {
     var title: String {
         switch self {
         case .notFound:
-            return "City not found!";
+            return "City not found!"
         case .networkFailure:
-            return "You seem to be offline!";
+            return "You seem to be offline!"
         default:
             return "Something went wrong!"
         }
@@ -30,9 +30,9 @@ extension NetworkError {
         case .notFound:
             return "Please adjust keyword or postcode."
         case .networkFailure:
-            return "Please connect to the Internet and start punting.";
+            return "Please connect to the Internet and start punting."
         default:
-            return "Please try again later.";
+            return "Please try again later."
         }
     }
 

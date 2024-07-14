@@ -18,9 +18,9 @@ struct WeatherDetailView: View {
     // MARK: - UI Body
 
     var body: some View {
-     
+
         ZStack {
-      
+
             backgroundGradientView
 
             VStack {
@@ -32,8 +32,8 @@ struct WeatherDetailView: View {
                     Spacer()
                     Spacer()
 
-                case .success(let weather):
-                    WeatherSummaryView(weather: weather)
+                case .success(let weatherItem):
+                    WeatherSummaryView(item: weatherItem)
 
                 case .failure(let error):
                     Spacer()

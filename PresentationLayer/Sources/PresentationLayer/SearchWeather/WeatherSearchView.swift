@@ -59,9 +59,9 @@ public struct WeatherSearchView: View {
                 viewModel.updateSearchQuery(searchText)
             }
             .onChange(of: viewModel.loadingState) {
-                if case .success(let weather) = viewModel.loadingState {
+                if case .success(let item) = viewModel.loadingState {
                     modelContext.insert(
-                        SearchLocation(id: weather.id, name: weather.cityName, timeStamp: Date.now)
+                        SearchLocation(id: item.id, name: item.cityName, timeStamp: Date.now)
                     )
                 }
             }
@@ -103,7 +103,7 @@ private extension WeatherSearchView {
                 .foregroundColor(.white)
                 .accessibilityHidden(true)
 
-            Text("Search weather by city name or postcode")
+            Text(viewModel.greetingMessage)
                 .font(.title3)
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
@@ -116,10 +116,10 @@ private extension WeatherSearchView {
     }
 
     @ViewBuilder
-    func searchResultView(from weather: CityWeather) -> some View {
+    func searchResultView(from item: WeatherPresentationItem) -> some View {
         VStack(alignment: .center) {
             Spacer()
-            weatherDetailView(from: weather)
+            weatherDetailView(from: item)
             Spacer()
             Spacer()
             Spacer()
@@ -129,8 +129,8 @@ private extension WeatherSearchView {
     }
 
     @ViewBuilder
-    func weatherDetailView(from weather: CityWeather) -> some View {
-        WeatherSummaryView(weather: weather)
+    func weatherDetailView(from item: WeatherPresentationItem) -> some View {
+        WeatherSummaryView(item: item)
     }
 
     @ToolbarContentBuilder
@@ -187,7 +187,7 @@ private extension WeatherSearchView {
             HStack {
                 Image(systemName: "magnifyingglass")
                     .padding(.leading, 5)
-                TextField("Search for a city", text: $searchText)
+                TextField(viewModel.searchBarPlaceholder, text: $searchText)
                     .autocorrectionDisabled()
                     .onTapGesture {
                         isSearching = true
@@ -216,7 +216,7 @@ private extension WeatherSearchView {
         VStack {
             if !recentLocations.isEmpty {
                 HStack {
-                    Text("Recent Searches")
+                    Text(viewModel.recentSearchesHeaderText)
                         .font(.callout)
                         .foregroundStyle(.white.opacity(0.7))
                         .padding(.leading)
