@@ -7,58 +7,70 @@ import SharedUtils
 @MainActor
 public class WeatherSearchViewModel: ObservableObject {
 
+    // MARK: - Properties
+
+    @Published private var searchQuery: String = ""
+
+    @Published private(set) var weatherSearchState: WeatherSearchState = .idle
+
     private var useCase: WeatherUseCase
 
-    @Published var searchQuery: String = ""
+    private var cancellables: Set<AnyCancellable> = .init()
 
-    @Published var weatherSearchState: WeatherSearchState = .idle
-
-    private var searchCancellable: AnyCancellable?
-
-    // MARK: - Lifecycle
+    // MARK: - Initializer
 
     public init() {
         useCase = WeatherUseCase()
-    }
-
-    deinit {
-        searchCancellable?.cancel()
-        searchCancellable = nil
+        bindSearch()
     }
 
     // MARK: - API Methods
 
-    func bindSearchQuery(_ query: String) {
+    func updateSearchQuery(_ query: String) {
+        searchQuery = query
+    }
+}
 
-        self.searchQuery = query
+// MARK: - Private
 
-        searchCancellable?.cancel()
+private extension WeatherSearchViewModel {
 
+    private func bindSearch() {
         let searchInput = $searchQuery
-            .debounce(for: .milliseconds(300), scheduler: Scheduler.main)
+            .debounce(for: .milliseconds(500), scheduler: Scheduler.main)
             .removeDuplicates()
 
-        searchCancellable = searchInput
+        searchInput
             .filter { !$0.isEmpty }
-            .setFailureType(to: NetworkError.self)
-            .flatMapLatest { [unowned self] query in
-                useCase.fetchWeather(with: query)
-            }
+            .sink(receiveValue: { [unowned self] query in
+                print(query)
+                fetchWeather(from: query)
+            })
+            .store(in: &cancellables)
+    }
+
+    private func fetchWeather(from query: String) {
+
+        weatherSearchState = .loading
+
+        useCase
+            .fetchWeather(with: query)
             .receive(on: Scheduler.main)
-            .sink { completion in
+            .delay(for: .seconds(0.5), scheduler: Scheduler.main)
+            .sink { [unowned self] completion in
                 if case .failure(let error) = completion {
-                    self.weatherSearchState = .failure(error)
+                    weatherSearchState = .failure(error)
                 }
-            } receiveValue: { result in
-                self.weatherSearchState = .success(result)
+            } receiveValue: { [unowned self] result in
+                weatherSearchState = .success(result)
                 print(result)
             }
+            .store(in: &cancellables)
     }
 }
 
 enum WeatherSearchState {
     case idle
-    case searching
     case loading
     case success(CityWeather)
     case failure(NetworkError)
@@ -69,7 +81,6 @@ extension WeatherSearchState: Equatable {
     static func == (lhs: WeatherSearchState, rhs: WeatherSearchState) -> Bool {
         switch (lhs, rhs) {
         case (.idle, .idle): return true
-        case (.searching, .searching): return true
         case (.loading, .loading): return true
         case (.success(let lhs), .success(let rhs)): return lhs == rhs
         case (.failure, .failure): return true

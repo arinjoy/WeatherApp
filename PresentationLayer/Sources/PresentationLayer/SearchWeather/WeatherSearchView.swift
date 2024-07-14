@@ -31,13 +31,25 @@ public struct WeatherSearchView: View {
                     case .idle:
                         greeetingView
 
+                    case .loading:
+                        Spacer()
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
+                        Spacer()
+                        Spacer()
+
                     case .success(let weather):
                         searchResultView(from: weather)
 
                     case .failure:
-                        EmptyView()
-                    case .loading:
-                        EmptyView()
+                        Spacer()
+                        Text("Error!")
+                            .font(.largeTitle)
+                            .fontWeight(.medium)
+                            .foregroundStyle(.white)
+                        Spacer()
+                        Spacer()
+
                     default:
                         EmptyView()
                     }
@@ -58,7 +70,7 @@ public struct WeatherSearchView: View {
     }
 
     private func applyQuery() {
-        viewModel.bindSearchQuery(searchText)
+        viewModel.updateSearchQuery(searchText)
     }
 }
 

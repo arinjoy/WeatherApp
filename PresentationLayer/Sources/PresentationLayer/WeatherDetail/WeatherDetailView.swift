@@ -18,10 +18,25 @@ struct WeatherDetailView: View {
             backgroundGradientView
 
             VStack {
-
                 switch viewModel.weatherSearchState {
+                case .loading:
+                    Spacer()
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
+                    Spacer()
+                    Spacer()
+
                 case .success(let weather):
                     WeatherSummaryView(weather: weather)
+
+                case .failure:
+                    Spacer()
+                    Text("Error!")
+                        .font(.largeTitle)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.white)
+                    Spacer()
+                    Spacer()
 
                 default:
                     EmptyView()
@@ -31,7 +46,7 @@ struct WeatherDetailView: View {
             }
         }
         .onAppear {
-            viewModel.bindSearchQuery(cityName)
+            viewModel.updateSearchQuery(cityName)
         }
     }
 
