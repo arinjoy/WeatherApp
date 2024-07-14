@@ -18,13 +18,13 @@ struct WeatherDetailView: View {
     // MARK: - UI Body
 
     var body: some View {
-        
+     
         ZStack {
-        
+      
             backgroundGradientView
 
             VStack {
-                switch viewModel.weatherSearchState {
+                switch viewModel.loadingState {
                 case .loading:
                     Spacer()
                     ProgressView()

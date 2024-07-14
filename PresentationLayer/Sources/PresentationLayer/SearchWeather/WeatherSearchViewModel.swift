@@ -4,23 +4,23 @@ import DomainLayer
 import DataLayer
 import SharedUtils
 
-@MainActor
+//@MainActor
 public class WeatherSearchViewModel: ObservableObject {
 
     // MARK: - Properties
 
     @Published private var searchQuery: String = ""
 
-    @Published private(set) var weatherSearchState: WeatherSearchState = .idle
+    @Published private(set) var loadingState: LoadingState = .idle
 
-    private var useCase: WeatherUseCase
+    private var useCase: WeatherUseCaseType
 
     private var cancellables: Set<AnyCancellable> = .init()
 
     // MARK: - Initializer
 
-    public init() {
-        useCase = WeatherUseCase()
+    public init(useCase: WeatherUseCaseType = WeatherUseCase()) {
+        self.useCase = useCase
         bindSearch()
     }
 
@@ -50,11 +50,11 @@ private extension WeatherSearchViewModel {
     private func updateSearchState(from query: String) {
 
         guard query.trimmed().isEmpty == false else {
-            weatherSearchState = .idle
+            loadingState = .idle
             return
         }
 
-        weatherSearchState = .loading
+        loadingState = .loading
 
         useCase
             .fetchWeather(with: query)
@@ -62,26 +62,26 @@ private extension WeatherSearchViewModel {
             .delay(for: .seconds(0.5), scheduler: Scheduler.main)
             .sink { [unowned self] completion in
                 if case .failure(let error) = completion {
-                    weatherSearchState = .failure(error)
+                    loadingState = .failure(error)
                 }
             } receiveValue: { [unowned self] result in
-                weatherSearchState = .success(result)
+                loadingState = .success(result)
                 print(result)
             }
             .store(in: &cancellables)
     }
 }
 
-enum WeatherSearchState {
+enum LoadingState {
     case idle
     case loading
     case success(CityWeather)
     case failure(NetworkError)
 }
 
-extension WeatherSearchState: Equatable {
+extension LoadingState: Equatable {
 
-    static func == (lhs: WeatherSearchState, rhs: WeatherSearchState) -> Bool {
+    static func == (lhs: LoadingState, rhs: LoadingState) -> Bool {
         switch (lhs, rhs) {
         case (.idle, .idle): return true
         case (.loading, .loading): return true

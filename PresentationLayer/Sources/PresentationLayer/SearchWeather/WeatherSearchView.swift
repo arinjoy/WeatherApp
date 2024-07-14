@@ -32,7 +32,7 @@ public struct WeatherSearchView: View {
                 }
 
                 VStack {
-                    switch viewModel.weatherSearchState {
+                    switch viewModel.loadingState {
                     case .idle:
                         greeetingView
 
@@ -58,8 +58,8 @@ public struct WeatherSearchView: View {
             .onChange(of: searchText) {
                 viewModel.updateSearchQuery(searchText)
             }
-            .onChange(of: viewModel.weatherSearchState) {
-                if case .success(let weather) = viewModel.weatherSearchState {
+            .onChange(of: viewModel.loadingState) {
+                if case .success(let weather) = viewModel.loadingState {
                     modelContext.insert(
                         SearchLocation(id: weather.id, name: weather.cityName, timeStamp: Date.now)
                     )
