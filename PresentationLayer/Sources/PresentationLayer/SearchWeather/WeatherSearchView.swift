@@ -65,6 +65,13 @@ public struct WeatherSearchView: View {
                     )
                 }
             }
+            .onTapGesture {
+                withAnimation(.easeIn(duration: 0.3)) {
+                    if isSearching {
+                        toggleSystemKeyboard(isShowing: false)
+                    }
+                }
+            }
         }
     }
 }
@@ -124,13 +131,6 @@ private extension WeatherSearchView {
     @ViewBuilder
     func weatherDetailView(from weather: CityWeather) -> some View {
         WeatherSummaryView(weather: weather)
-            .onTapGesture {
-                withAnimation(.easeIn(duration: 0.3)) {
-                    if isSearching {
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    }
-                }
-            }
     }
 
     @ToolbarContentBuilder
@@ -161,7 +161,7 @@ private extension WeatherSearchView {
                 Spacer()
 
                 Button {
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    toggleSystemKeyboard(isShowing: false)
                     withAnimation {
                         isSearching = false
                     }
@@ -230,10 +230,10 @@ private extension WeatherSearchView {
                     ForEach(recentLocations, id: \.timeStamp) { location in
                         locationTile(from: location)
                             .contextMenu {
-                                Button {
+                                Button(role: .destructive) {
                                     modelContext.delete(location)
                                 } label: {
-                                    Text("Delete")
+                                    Label("Delete", systemImage: "trash")
                                 }
                             }
                     }
@@ -261,6 +261,25 @@ private extension WeatherSearchView {
             )
             .cornerRadius(10)
         }
+    }
+
+    func toggleSystemKeyboard(isShowing: Bool) {
+        if isShowing {
+            UIApplication.shared.sendAction(
+                #selector(UIResponder.becomeFirstResponder),
+                to: nil,
+                from: nil,
+                for: nil
+            )
+        } else {
+            UIApplication.shared.sendAction(
+                #selector(UIResponder.resignFirstResponder),
+                to: nil,
+                from: nil,
+                for: nil
+            )
+        }
+
     }
 
 }
