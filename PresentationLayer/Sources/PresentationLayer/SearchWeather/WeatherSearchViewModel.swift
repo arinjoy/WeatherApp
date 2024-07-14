@@ -41,15 +41,18 @@ private extension WeatherSearchViewModel {
             .removeDuplicates()
 
         searchInput
-            .filter { !$0.isEmpty }
             .sink(receiveValue: { [unowned self] query in
-                print(query)
-                fetchWeather(from: query)
+                updateSearchState(from: query)
             })
             .store(in: &cancellables)
     }
 
-    private func fetchWeather(from query: String) {
+    private func updateSearchState(from query: String) {
+
+        guard query.isEmpty == false else {
+            weatherSearchState = .idle
+            return
+        }
 
         weatherSearchState = .loading
 

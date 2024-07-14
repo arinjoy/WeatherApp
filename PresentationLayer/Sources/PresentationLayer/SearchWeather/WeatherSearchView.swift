@@ -6,6 +6,8 @@ public struct WeatherSearchView: View {
 
     public init() {}
 
+    // MARK: - Properties
+
     @StateObject var viewModel: WeatherSearchViewModel = .init()
 
     @State private var searchText = ""
@@ -13,7 +15,10 @@ public struct WeatherSearchView: View {
 
     @Environment(\.modelContext) private var modelContext
 
-    @Query(sort: \SearchLocation.timeStamp, order: .reverse, animation: .smooth) var recentLocations: [SearchLocation]
+    @Query(sort: \SearchLocation.timeStamp, order: .reverse, animation: .smooth)
+    var recentLocations: [SearchLocation]
+
+    // MARK: - UI Body
 
     public var body: some View {
         NavigationStack {
@@ -41,23 +46,17 @@ public struct WeatherSearchView: View {
                     case .success(let weather):
                         searchResultView(from: weather)
 
-                    case .failure:
+                    case .failure(let error):
                         Spacer()
-                        Text("Error!")
-                            .font(.largeTitle)
-                            .fontWeight(.medium)
-                            .foregroundStyle(.white)
+                        ErrorMessageView(error: error)
                         Spacer()
                         Spacer()
-
-                    default:
-                        EmptyView()
                     }
                 }
             }
             .toolbar { toolBarContent }
             .onChange(of: searchText) {
-                applyQuery()
+                viewModel.updateSearchQuery(searchText)
             }
             .onChange(of: viewModel.weatherSearchState) {
                 if case .success(let weather) = viewModel.weatherSearchState {
@@ -68,11 +67,9 @@ public struct WeatherSearchView: View {
             }
         }
     }
-
-    private func applyQuery() {
-        viewModel.updateSearchQuery(searchText)
-    }
 }
+
+// MARK: - Private views
 
 private extension WeatherSearchView {
 
@@ -88,12 +85,23 @@ private extension WeatherSearchView {
 
     @ViewBuilder
     var greeetingView: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .center) {
             Spacer()
-            Text("Hello!")
-                .font(.largeTitle)
-                .fontWeight(.medium)
+            Image(systemName: "cloud")
+                .symbolRenderingMode(.hierarchical)
+                .resizable()
+                .scaledToFit()
+                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .frame(width: 60, height: 60)
+                .foregroundColor(.white)
+                .accessibilityHidden(true)
+
+            Text("Search weather by city name or postcode")
+                .font(.title3)
                 .foregroundStyle(.white)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+
             Spacer()
             Spacer()
             Spacer()
@@ -173,13 +181,13 @@ private extension WeatherSearchView {
     var searchBar: some View {
         ZStack {
             Capsule()
-                .foregroundStyle(.thinMaterial)
+                .foregroundStyle(.ultraThinMaterial)
                 .frame(width: 310, height: 40)
 
             HStack {
                 Image(systemName: "magnifyingglass")
                     .padding(.leading, 5)
-                TextField("Search for a location", text: $searchText)
+                TextField("Search for a city", text: $searchText)
                     .autocorrectionDisabled()
                     .onTapGesture {
                         isSearching = true
@@ -193,6 +201,7 @@ private extension WeatherSearchView {
                         Image(systemName: "x.circle.fill")
                             .foregroundStyle(.white)
                     }
+                    .accessibilityLabel("Clear")
                     .padding(.trailing, 5)
                 }
             }
@@ -202,7 +211,8 @@ private extension WeatherSearchView {
         }
     }
 
-    private var recentLocationsView: some View {
+    @ViewBuilder
+    var recentLocationsView: some View {
         VStack {
             if !recentLocations.isEmpty {
                 HStack {

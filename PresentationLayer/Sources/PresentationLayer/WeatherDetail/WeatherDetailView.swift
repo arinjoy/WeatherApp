@@ -3,13 +3,19 @@ import DomainLayer
 
 struct WeatherDetailView: View {
 
+    // MARK: - Properties
+
     private let cityName: String
+
+    @StateObject var viewModel: WeatherSearchViewModel = .init()
+
+    // MARK: - Initializer
 
     init(cityName: String) {
         self.cityName = cityName
     }
 
-    @StateObject var viewModel: WeatherSearchViewModel = .init()
+    // MARK: - UI Body
 
     var body: some View {
         
@@ -29,12 +35,9 @@ struct WeatherDetailView: View {
                 case .success(let weather):
                     WeatherSummaryView(weather: weather)
 
-                case .failure:
+                case .failure(let error):
                     Spacer()
-                    Text("Error!")
-                        .font(.largeTitle)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.white)
+                    ErrorMessageView(error: error)
                     Spacer()
                     Spacer()
 
@@ -50,8 +53,10 @@ struct WeatherDetailView: View {
         }
     }
 
+    // MARK: - Private Views
+
     @ViewBuilder
-    var backgroundGradientView: some View {
+    private var backgroundGradientView: some View {
         LinearGradient(colors: [
             Color(hue: 0.62, saturation: 0.5, brightness: 0.33),
             Color(hue: 0.66, saturation: 0.8, brightness: 0.1)
