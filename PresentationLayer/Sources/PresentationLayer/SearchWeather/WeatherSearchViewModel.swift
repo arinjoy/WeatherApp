@@ -4,7 +4,6 @@ import DomainLayer
 import DataLayer
 import SharedUtils
 
-//@MainActor
 public class WeatherSearchViewModel: ObservableObject {
 
     // MARK: - Properties
