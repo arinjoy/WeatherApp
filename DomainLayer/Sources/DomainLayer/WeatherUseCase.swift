@@ -30,10 +30,6 @@ public final class WeatherUseCase: WeatherUseCaseType {
             .eraseToAnyPublisher()
     }
 
-    public func fetchWeather(with query: String) async throws -> CityWeather {
-        try await fetchWeather(with: query).async()
-    }
-
 }
 
 // MARK: - Private Helpers
