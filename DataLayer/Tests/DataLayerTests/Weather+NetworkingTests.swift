@@ -76,7 +76,7 @@ final class WeatherNetworkingTests: XCTestCase {
         XCTAssertNotNil(receivedResponse)
         XCTAssertEqual(receivedResponse?.cityId, 2147714)
         XCTAssertEqual(receivedResponse?.name, "Sydney")
-        XCTAssertEqual(receivedResponse?.mainInfo.temperture, 16.44)
+        XCTAssertEqual(receivedResponse?.mainInfo.temperature, 16.44)
         XCTAssertEqual(receivedResponse?.mainInfo.feelsLikeTemperature, 15.47)
         XCTAssertEqual(receivedResponse?.mainInfo.humidity, 51.0)
         XCTAssertEqual(receivedResponse?.summaries?.first?.title, "Clear")

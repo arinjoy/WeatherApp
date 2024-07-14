@@ -65,7 +65,7 @@ final class WeatherNetworkingURLMockTests: XCTestCase {
 
         // There valid response should arrive
         XCTAssertEqual(response.cityId, 2147714)
-        XCTAssertEqual(response.mainInfo.temperture, 16.44)
+        XCTAssertEqual(response.mainInfo.temperature, 16.44)
 
     }
 

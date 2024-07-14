@@ -22,7 +22,7 @@ final class WeatherJSONDecodingTests: XCTestCase {
         XCTAssertEqual(mappedItem.cityId, 2147714)
         XCTAssertEqual(mappedItem.name, "Sydney")
 
-        XCTAssertEqual(mappedItem.mainInfo.temperture, 16.44)
+        XCTAssertEqual(mappedItem.mainInfo.temperature, 16.44)
         XCTAssertEqual(mappedItem.mainInfo.feelsLikeTemperature, 15.47)
         XCTAssertEqual(mappedItem.mainInfo.humidity, 51.0)
         XCTAssertEqual(mappedItem.mainInfo.minTemperature, 15.22)

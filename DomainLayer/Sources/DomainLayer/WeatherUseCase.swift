@@ -45,7 +45,7 @@ private extension WeatherUseCase {
     private func mapCityWeather(from item: WeatherInfo) -> CityWeather {
         CityWeather(id: String(item.cityId),
                     cityName: item.name,
-                    temperature: item.mainInfo.temperture,
+                    temperature: item.mainInfo.temperature,
                     feelsLikeTemperature: item.mainInfo.feelsLikeTemperature,
                     minTemperature: item.mainInfo.minTemperature,
                     maxTemperature: item.mainInfo.maxTemperature,
