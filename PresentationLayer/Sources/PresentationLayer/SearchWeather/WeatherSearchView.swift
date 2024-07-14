@@ -13,6 +13,8 @@ public struct WeatherSearchView: View {
     @State private var searchText = ""
     @State private var isSearching = false
 
+    @State private var isShowingRecentSearches = false
+
     @Environment(\.modelContext) private var modelContext
 
     @Query(sort: \SearchLocation.timeStamp, order: .reverse, animation: .smooth)
@@ -23,7 +25,8 @@ public struct WeatherSearchView: View {
     public var body: some View {
         NavigationStack {
             ZStack {
-                backgroundGradientView
+
+                DarkGradientView()
 
                 VStack {
                     Spacer()
@@ -34,7 +37,7 @@ public struct WeatherSearchView: View {
                 VStack {
                     switch viewModel.loadingState {
                     case .idle:
-                        greeetingView
+                        instructionsView
 
                     case .loading:
                         Spacer()
@@ -55,6 +58,7 @@ public struct WeatherSearchView: View {
                 }
             }
             .toolbar { toolBarContent }
+            .navigationTitle("")
             .onChange(of: searchText) {
                 viewModel.updateSearchQuery(searchText)
             }
@@ -73,6 +77,9 @@ public struct WeatherSearchView: View {
                 }
             }
         }
+        .sheet(isPresented: $isShowingRecentSearches) {
+            RecentSearchesListView()
+        }
     }
 }
 
@@ -81,24 +88,13 @@ public struct WeatherSearchView: View {
 private extension WeatherSearchView {
 
     @ViewBuilder
-    var backgroundGradientView: some View {
-        LinearGradient(colors: [
-            Color(hue: 0.62, saturation: 0.5, brightness: 0.33),
-            Color(hue: 0.66, saturation: 0.8, brightness: 0.1)
-        ], startPoint: .top, endPoint: .bottom)
-            .ignoresSafeArea()
-            .opacity(0.85)
-    }
-
-    @ViewBuilder
-    var greeetingView: some View {
+    var instructionsView: some View {
         VStack(alignment: .center) {
             Spacer()
             Image(systemName: "cloud")
                 .symbolRenderingMode(.hierarchical)
                 .resizable()
                 .scaledToFit()
-                .font(.system(size: 16, weight: .bold, design: .rounded))
                 .frame(width: 60, height: 60)
                 .foregroundColor(.white)
                 .accessibilityHidden(true)
@@ -165,6 +161,7 @@ private extension WeatherSearchView {
                     withAnimation {
                         isSearching = false
                     }
+
                 } label: {
                     Text("Done")
                         .frame(width: 50, height: 30)
@@ -214,32 +211,41 @@ private extension WeatherSearchView {
     @ViewBuilder
     var recentLocationsView: some View {
         VStack {
-            if !recentLocations.isEmpty {
-                HStack {
-                    Text(viewModel.recentSearchesHeaderText)
-                        .font(.callout)
-                        .foregroundStyle(.white.opacity(0.7))
-                        .padding(.leading)
-                        .padding(.bottom, -10)
-                    Spacer()
-                }
-            }
+            if recentLocations.isEmpty == false {
+                Button {
+                    isShowingRecentSearches = true
+                } label: {
+                    HStack(spacing: 10) {
+                        Text(viewModel.recentSearchesHeaderText)
+                            .font(.body)
+                            .foregroundStyle(.white.opacity(0.7))
+                            .padding(.leading)
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack {
-                    ForEach(recentLocations, id: \.timeStamp) { location in
-                        locationTile(from: location)
-                            .contextMenu {
-                                Button(role: .destructive) {
-                                    modelContext.delete(location)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                            }
+                        Image(systemName: "chevron.right")
+                            .foregroundStyle(.white)
+                            .frame(height: 30)
+
+                        Spacer()
                     }
                 }
-                .padding(.vertical, 8)
-                .padding(.leading)
+                .padding(.bottom, -10)
+
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(recentLocations, id: \.timeStamp) { location in
+                            locationTile(from: location)
+                                .contextMenu {
+                                    Button(role: .destructive) {
+                                        modelContext.delete(location)
+                                    } label: {
+                                        Label("Delete", systemImage: "trash")
+                                    }
+                                }
+                        }
+                    }
+                    .padding(.vertical, 8)
+                    .padding(.leading)
+                }
             }
         }
     }
@@ -256,10 +262,20 @@ private extension WeatherSearchView {
                 .padding(.horizontal, 6)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .foregroundStyle(.thinMaterial)
+                    .foregroundStyle(.thinMaterial.opacity(0.5))
                     .contentShape(Rectangle())
             )
             .cornerRadius(10)
+        }
+    }
+
+    // MARK: - Private methods
+
+    private func deleteItems(offsets: IndexSet) {
+        withAnimation {
+            for index in offsets {
+                modelContext.delete(recentLocations[index])
+            }
         }
     }
 
@@ -279,7 +295,6 @@ private extension WeatherSearchView {
                 for: nil
             )
         }
-
     }
 
 }
