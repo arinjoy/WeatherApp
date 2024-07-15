@@ -69,9 +69,10 @@ public struct WeatherSearchView: View {
                 }
             }
             .onTapGesture {
-                withAnimation(.easeIn(duration: 0.3)) {
-                    if isSearching {
-                        toggleSystemKeyboard(isShowing: false)
+                if isSearching {
+                    toggleSystemKeyboard(isShowing: false)
+                    withAnimation(.easeIn(duration: 0.3)) {
+                        isSearching = false
                     }
                 }
             }

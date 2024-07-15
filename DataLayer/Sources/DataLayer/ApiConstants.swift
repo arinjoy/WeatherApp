@@ -7,7 +7,9 @@ import Foundation
 
 struct ApiConstants {
 
-    /// Note:  change to your own OpenWeatherMap API key if needed
+    /// Note:  change to other OpenWeatherMap API key if needed
+    ///
+    /// TESTING NOTE:  modify this to trigger server error
     static let apiKey = "6379ee91d0b77e1f680a38b96ee6b716"
 
     static let baseUrl = URL(string: "https://api.openweathermap.org/data/2.5/weather")!
