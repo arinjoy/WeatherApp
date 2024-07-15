@@ -45,6 +45,9 @@ class WeatherSearchViewModel: ObservableObject {
 
     // MARK: - API Methods
 
+
+    /// Tells to update the most recently inputed search query
+    /// - Parameter query: The query string input coming from search keyboard
     func updateSearchQuery(_ query: String) {
         searchQuery = query
     }
@@ -54,7 +57,12 @@ class WeatherSearchViewModel: ObservableObject {
 
 private extension WeatherSearchViewModel {
 
+    /// Binds the latest value of search query to update the overall state of the view via
+    /// `LoadingState` enum and various output states
     private func bindSearch() {
+
+        // Wait for 1 second between subsequent searches to avoid
+        // triggering network request too often
         let searchInput = $searchQuery
             .debounce(for: .seconds(1.0), scheduler: Scheduler.main)
             .removeDuplicates()

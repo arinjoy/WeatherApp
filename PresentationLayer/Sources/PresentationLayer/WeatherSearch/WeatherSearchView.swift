@@ -31,39 +31,14 @@ struct WeatherSearchView: View {
                     bottomSearchBarView
                 }
 
-                VStack {
-                    switch viewModel.loadingState {
-                    case .idle:
-                        instructionsView
-
-                    case .loading:
-                        Spacer()
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
-                        Spacer()
-                        Spacer()
-
-                    case .success(let weather):
-                        searchResultView(from: weather)
-
-                    case .failure(let error):
-                        Spacer()
-                        ErrorMessageView(error: error)
-                        Spacer()
-                        Spacer()
-                    }
-                }
+                mainBodyView
             }
             .navigationTitle("")
             .onChange(of: searchText) {
                 viewModel.updateSearchQuery(searchText)
             }
             .onChange(of: viewModel.loadingState) {
-                if case .success(let item) = viewModel.loadingState {
-                    modelContext.insert(
-                        SearchLocation(id: item.id, name: item.cityName, timeStamp: Date.now)
-                    )
-                }
+                saveRecentLocationIfNeeded()
             }
             .onTapGesture {
                 isSearching = false
@@ -78,6 +53,32 @@ struct WeatherSearchView: View {
 // MARK: - Private views
 
 private extension WeatherSearchView {
+
+    @ViewBuilder
+    var mainBodyView: some View {
+        VStack {
+            switch viewModel.loadingState {
+            case .idle:
+                instructionsView
+
+            case .loading:
+                Spacer()
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: Color.white))
+                Spacer()
+                Spacer()
+
+            case .success(let weather):
+                searchResultView(from: weather)
+
+            case .failure(let error):
+                Spacer()
+                ErrorMessageView(error: error)
+                Spacer()
+                Spacer()
+            }
+        }
+    }
 
     @ViewBuilder
     var instructionsView: some View {
@@ -163,7 +164,6 @@ private extension WeatherSearchView {
                     text: $searchText,
                     prompt: Text(viewModel.searchBarPrompt).foregroundStyle(.white.opacity(0.7)))
                 .autocorrectionDisabled()
-                .keyboardType(.asciiCapable)
 
                 Spacer()
 
@@ -241,14 +241,20 @@ private extension WeatherSearchView {
             )
         }
     }
+}
 
-    // MARK: - Private methods
+// MARK: - Private Methods
 
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(recentLocations[index])
-            }
+private extension WeatherSearchView {
+
+    // Based on the viewModel loading state `.success` update and each
+    // time a location being searched,
+    // We save the location in the persistence
+    func saveRecentLocationIfNeeded() {
+        if case .success(let item) = viewModel.loadingState {
+            modelContext.insert(
+                SearchLocation(id: item.id, name: item.cityName, timeStamp: Date.now)
+            )
         }
     }
 }
