@@ -4,7 +4,7 @@ import DomainLayer
 import DataLayer
 import SharedUtils
 
-public class WeatherSearchViewModel: ObservableObject {
+class WeatherSearchViewModel: ObservableObject {
 
     // MARK: - Properties
 
@@ -27,7 +27,7 @@ public class WeatherSearchViewModel: ObservableObject {
 
     // MARK: - Initializer
 
-    public init(useCase: WeatherUseCaseType = WeatherUseCase()) {
+    init(useCase: WeatherUseCaseType = WeatherUseCase()) {
         self.useCase = useCase
         bindSearch()
     }
@@ -56,7 +56,7 @@ private extension WeatherSearchViewModel {
 
     private func bindSearch() {
         let searchInput = $searchQuery
-            .debounce(for: .milliseconds(500), scheduler: Scheduler.main)
+            .debounce(for: .seconds(1.0), scheduler: Scheduler.main)
             .removeDuplicates()
 
         searchInput

@@ -3,7 +3,7 @@ import PresentationLayer
 
 struct ContentView: View {
     var body: some View {
-        WeatherSearchView()
+        RootView()
             .modelContainer(for: SearchLocation.self, isAutosaveEnabled: true)
     }
 }

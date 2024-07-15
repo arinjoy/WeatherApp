@@ -2,9 +2,7 @@ import SwiftUI
 import SwiftData
 import DomainLayer
 
-public struct WeatherSearchView: View {
-
-    public init() {}
+struct WeatherSearchView: View {
 
     // MARK: - Properties
 
