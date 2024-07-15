@@ -169,10 +169,6 @@ final class WeatherNetworkingURLMockTests: XCTestCase {
             return
         }
     }
-
-    // TODO: Add more unit tests for various error code mapping
-    // to cover the internals of the error mapping of NetworkService
-
 }
 // swiftlint:enable force_unwrapping
 

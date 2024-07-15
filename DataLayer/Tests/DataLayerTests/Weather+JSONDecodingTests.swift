@@ -52,4 +52,3 @@ final class WeatherJSONDecodingTests: XCTestCase {
         XCTAssertNil(mappedItem)
     }
 }
-

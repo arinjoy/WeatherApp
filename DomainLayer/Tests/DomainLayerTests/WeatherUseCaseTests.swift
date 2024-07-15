@@ -62,11 +62,11 @@ final class WeatherUseCaseTests: XCTestCase {
 
         // GIVEN - the useCase is made out of service mock that returns sample data
         let serviceMock = NetworkServiceMock(
-            response: TestHelper.sampleWeatherInfo, 
+            response: TestHelper.sampleWeatherInfo,
             returningError: false)
         useCase = WeatherUseCase(networkService: serviceMock)
 
-        // WHEN - being requested for syndey
+        // WHEN - being requested for sydney
         useCase.fetchWeather(with: "Sydney")
             .sink { completion in
                 if case .failure(let error) = completion {
@@ -79,7 +79,7 @@ final class WeatherUseCaseTests: XCTestCase {
 
         // THEN - received `CityWeather` response should be correct with
         // and being mapped correctly (flattened) from underlying data layer object
-        // which is nested substruture
+        // which is nested substructure
 
         XCTAssertEqual(receivedResponse?.id, "2147714")
         XCTAssertEqual(receivedResponse?.cityName, "Sydney")
@@ -122,7 +122,6 @@ final class WeatherUseCaseTests: XCTestCase {
                 receivedResponse = response
             }
             .store(in: &cancellables)
-
 
         // THEN - there should any error returned and it is expected `server` error
         XCTAssertEqual(receivedError, .server)
