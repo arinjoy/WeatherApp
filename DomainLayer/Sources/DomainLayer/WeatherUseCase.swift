@@ -20,8 +20,15 @@ public final class WeatherUseCase: WeatherUseCaseType {
     // MARK: - WeatherUseCaseType
 
     public func fetchWeather(with query: String) -> AnyPublisher<CityWeather, NetworkError> {
-        networkService
-            .load(Resource<WeatherInfo>.weather(query: query + ",au"))
+
+        // Modify the query to append AU country code
+        // NOTE: Please see the `transformQueryString(:)` below and technical notes
+        // why Australian only search has been implemented at this stage and we are
+        // not fuzzy searching globally
+        let modifiedQuery = query + ",au"
+
+        return networkService
+            .load(Resource<WeatherInfo>.weather(query: modifiedQuery))
             .map { [unowned self] in
                 self.mapCityWeather(from: $0)
             }
@@ -56,5 +63,53 @@ private extension WeatherUseCase {
                                 (item.summaries?.first?.iconCode ?? "") + ".png"
                     )
         )
+    }
+
+    // TODO: - ✋🏼
+    /// Currently this method is not being used as it is not fully optimised yet.
+    /// If we don't specify a fixed country code then results into global search combining all possible city names 
+    /// across the world. Ideally, we should show a list of cities first when a city is searched and and then tapping
+    /// on the city we should fetch weather by it's city Id. That requires two stage UX journey to search for cities
+    /// using one api call and fetch weather for single specific city, involving two api calls.
+    ///
+    /// Modify the incoming query string based on city or postcode
+    /// - Parameter query: The raw query string that was sent which could contain city name or postcode
+    /// - Returns: The modified query after trimming and possible "au" country injection
+    private func transformQueryString(_ query: String) -> String {
+        let keyword = query.trimmed()
+
+        var shouldAppendAUCountryCode = false
+
+        if keyword.isNumber && keyword.count == 4 {
+            shouldAppendAUCountryCode = true
+        } else {
+            // There are cities in other countries such as
+            // `Mel`, `Melbourn`, `Bris`.
+            // So we can filter out some those cities
+            // WIP: Not fully implemented yet...
+            for city in ["melbourne", "brisbane"] {
+                if city.contains(keyword.lowercased()) {
+                    shouldAppendAUCountryCode = true
+                    break
+                } else {
+                    continue
+                }
+            }
+        }
+
+        if shouldAppendAUCountryCode {
+            return keyword + ",au"
+        }
+
+        return keyword
+    }
+
+}
+
+private extension String {
+
+    var isNumber: Bool {
+        let digitsCharacters = CharacterSet(charactersIn: "0123456789")
+        return CharacterSet(charactersIn: self).isSubset(of: digitsCharacters)
     }
 }
