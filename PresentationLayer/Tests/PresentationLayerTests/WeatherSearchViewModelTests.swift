@@ -110,7 +110,7 @@ final class WeatherSearchViewModelTests: XCTestCase {
             XCTAssertEqual(item.maxTemperature, "10.9")
             XCTAssertEqual(item.feelsLike, "Feels like 9°")
             XCTAssertEqual(item.humidity, "85%")
-            XCTAssertEqual(item.windSpeed, "4.5m/s")
+            XCTAssertEqual(item.windSpeed, "4.5 m/s")
 
             // NOTE: We could use Transformer helper object and unit test
             // all the formatting conversion logic

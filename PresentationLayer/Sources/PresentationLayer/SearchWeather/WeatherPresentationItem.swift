@@ -32,7 +32,7 @@ struct WeatherPresentationItem: Identifiable, Equatable {
     var feelsLike: String { "Feels like \(Int(weather.feelsLikeTemperature))°" }
 
     var humidity: String { "\(weather.humidity.round())%" }
-    var windSpeed: String { "\(Self.numberFormatter.string(for: weather.windSpeed) ?? "0")m/s" }
+    var windSpeed: String { "\(Self.numberFormatter.string(for: weather.windSpeed) ?? "0") m/s" }
 
     // MARK: - Private
 

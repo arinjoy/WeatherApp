@@ -57,7 +57,6 @@ public struct WeatherSearchView: View {
                     }
                 }
             }
-            .toolbar { toolBarContent }
             .navigationTitle("")
             .onChange(of: searchText) {
                 viewModel.updateSearchQuery(searchText)
@@ -129,24 +128,6 @@ private extension WeatherSearchView {
         WeatherSummaryView(item: item)
     }
 
-    @ToolbarContentBuilder
-    var toolBarContent: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarTrailing) {
-            Button {
-                // TODO: isShowingSettings.toggle()
-            } label: {
-                Image(systemName: "gear")
-                    .resizable()
-                    .foregroundColor(.white)
-                    .scaledToFit()
-                    .frame(width: 50, height: 30)
-                    .shadow(radius: 6, y: 4)
-                    .accessibilityAddTraits(.isButton)
-                    .accessibilityLabel("Settings")
-            }
-        }
-    }
-
     @ViewBuilder
     var bottomSearchBarView: some View {
         HStack {
@@ -165,7 +146,6 @@ private extension WeatherSearchView {
                     Text("Done")
                         .frame(width: 50, height: 30)
                 }
-                .tint(.white)
 
                 Spacer()
             }
@@ -236,7 +216,7 @@ private extension WeatherSearchView {
 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        ForEach(recentLocations, id: \.timeStamp) { location in
+                        ForEach(recentLocations.prefix(10), id: \.timeStamp) { location in
                             locationTile(from: location)
                                 .contextMenu {
                                     Button(role: .destructive) {
@@ -267,9 +247,7 @@ private extension WeatherSearchView {
             .background(
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundStyle(.thinMaterial.opacity(0.5))
-                    .contentShape(Rectangle())
             )
-            .cornerRadius(10)
         }
     }
 

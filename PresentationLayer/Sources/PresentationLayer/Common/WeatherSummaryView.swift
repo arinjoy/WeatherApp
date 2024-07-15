@@ -6,45 +6,55 @@ struct WeatherSummaryView: View {
     let item: WeatherPresentationItem
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 5) {
             HStack {
                 Text(item.averageTemperature)
-                    .font(.system(size: 100))
-                    .foregroundStyle(.white)
+                    .font(.system(size: 60))
 
-                AsyncImage(url: item.iconURL) { phase in
-                    switch phase {
-                    case .empty:
-                        ProgressView()
-                    case .success(let image):
-                        image.resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 100, height: 100)
-                    case .failure:
-                        Image(systemName: "photo")
-                    @unknown default:
-                        EmptyView()
-                    }
-                }
-                .frame(maxWidth: 100, maxHeight: 100)
+                remoteWeatherIcon(from: item.iconURL)
             }
 
             Text(item.cityName)
                 .font(.largeTitle)
                 .fontWeight(.medium)
-                .foregroundStyle(.white)
                 .lineLimit(1)
 
             Text(item.summary)
                 .font(.title2)
-                .foregroundStyle(.white)
                 .lineLimit(1)
 
-            Text(item.feelsLike)
-                .font(.title2)
-                .foregroundStyle(.white)
-                .lineLimit(1)
+            HStack {
+                Image(systemName: "thermometer")
+
+                Text(item.feelsLike)
+                    .font(.title2)
+                    .lineLimit(1)
+            }
+
+//            infoTileView(icon: "wind", header: "WIND", infoText: item.windSpeed)
+
         }
+        .foregroundStyle(.white)
+    }
+
+}
+
+// MARK: - Private views
+
+private extension WeatherSummaryView {
+
+    @ViewBuilder
+    func remoteWeatherIcon(from url: URL?) -> some View {
+        AsyncImage(url: item.iconURL) { phase in
+            switch phase {
+            case .success(let image):
+                image.resizable()
+                    .aspectRatio(contentMode: .fit)
+            default:
+                EmptyView()
+            }
+        }
+        .frame(width: 60)
     }
 }
 

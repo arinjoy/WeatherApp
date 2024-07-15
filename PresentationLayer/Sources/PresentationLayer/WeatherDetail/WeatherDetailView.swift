@@ -1,5 +1,4 @@
 import SwiftUI
-import DomainLayer
 
 struct WeatherDetailView: View {
 
@@ -33,7 +32,21 @@ struct WeatherDetailView: View {
                     Spacer()
 
                 case .success(let weatherItem):
+                    Spacer()
                     WeatherSummaryView(item: weatherItem)
+
+
+                    Spacer().frame(height: 30)
+
+                    HStack(spacing: 20) {
+                        infoTileView(icon: "wind", header: "WIND", infoText: weatherItem.windSpeed)
+
+                        infoTileView(icon: "humidity", header: "HUMIDITY", infoText: weatherItem.humidity)
+                    }
+
+                    Spacer()
+                    Spacer()
+                    Spacer()
 
                 case .failure(let error):
                     Spacer()
@@ -51,6 +64,30 @@ struct WeatherDetailView: View {
         .onAppear {
             viewModel.updateSearchQuery(cityName)
         }
+    }
+
+    // MARK: - Private Views
+
+    @ViewBuilder
+    private func infoTileView(icon: String, header: String, infoText: String) -> some View {
+
+        VStack {
+            HStack {
+                Image(systemName: icon)
+                Text(header)
+                    .font(.footnote)
+            }
+            .foregroundStyle(.white.opacity(0.7))
+
+            Text(infoText)
+                .font(.headline)
+                .foregroundStyle(.white)
+        }
+        .padding(8)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .foregroundStyle(.thinMaterial.opacity(0.2))
+        )
     }
 }
 

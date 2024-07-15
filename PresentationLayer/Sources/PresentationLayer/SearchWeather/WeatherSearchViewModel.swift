@@ -76,7 +76,7 @@ private extension WeatherSearchViewModel {
         loadingState = .loading
 
         useCase
-            .fetchWeather(with: query)
+            .fetchWeather(with: query.trimmed())
             .receive(on: Scheduler.main)
             // TODO: 
             // Extra delay added for testing and visualisation only.
