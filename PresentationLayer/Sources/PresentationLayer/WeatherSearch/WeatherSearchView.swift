@@ -9,7 +9,7 @@ struct WeatherSearchView: View {
     @StateObject var viewModel: WeatherSearchViewModel = .init()
 
     @State private var searchText = ""
-    @State private var isSearching = false
+    @FocusState private var isSearching: Bool
 
     @State private var isShowingRecentSearches = false
 
@@ -23,7 +23,6 @@ struct WeatherSearchView: View {
     public var body: some View {
         NavigationStack {
             ZStack {
-
                 DarkGradientView()
 
                 VStack {
@@ -67,12 +66,7 @@ struct WeatherSearchView: View {
                 }
             }
             .onTapGesture {
-                if isSearching {
-                    toggleSystemKeyboard(isShowing: false)
-                    withAnimation(.easeIn(duration: 0.3)) {
-                        isSearching = false
-                    }
-                }
+                isSearching = false
             }
         }
         .sheet(isPresented: $isShowingRecentSearches) {
@@ -131,23 +125,24 @@ private extension WeatherSearchView {
     var bottomSearchBarView: some View {
         HStack {
             searchBar
-
+            
             if isSearching {
                 Spacer()
 
                 Button {
-                    toggleSystemKeyboard(isShowing: false)
                     withAnimation {
                         isSearching = false
                     }
-
                 } label: {
                     Text("Done")
                         .frame(width: 50, height: 30)
                 }
-
                 Spacer()
             }
+        }
+        .focused($isSearching)
+        .onTapGesture {
+            isSearching = true
         }
         .padding(.bottom)
     }
@@ -168,13 +163,11 @@ private extension WeatherSearchView {
                     text: $searchText,
                     prompt: Text(viewModel.searchBarPrompt).foregroundStyle(.white.opacity(0.7)))
                 .autocorrectionDisabled()
-                .onTapGesture {
-                    isSearching = true
-                }
+                .keyboardType(.asciiCapable)
 
                 Spacer()
 
-                if isSearching && !searchText.isEmpty {
+                if isSearching && searchText.isEmpty == false {
                     Button {
                         searchText = ""
                     } label: {
@@ -241,8 +234,7 @@ private extension WeatherSearchView {
             Text(location.name)
                 .font(.headline)
                 .foregroundStyle(.white)
-                .padding(.vertical, 6)
-                .padding(.horizontal, 6)
+                .padding(6)
             .background(
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundStyle(.thinMaterial.opacity(0.5))
@@ -259,25 +251,6 @@ private extension WeatherSearchView {
             }
         }
     }
-
-    func toggleSystemKeyboard(isShowing: Bool) {
-        if isShowing {
-            UIApplication.shared.sendAction(
-                #selector(UIResponder.becomeFirstResponder),
-                to: nil,
-                from: nil,
-                for: nil
-            )
-        } else {
-            UIApplication.shared.sendAction(
-                #selector(UIResponder.resignFirstResponder),
-                to: nil,
-                from: nil,
-                for: nil
-            )
-        }
-    }
-
 }
 
 #Preview {
